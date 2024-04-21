@@ -18,7 +18,7 @@ def main():
     print("Starting")
     # Load data
     digits_data_images, digits_data_labels = load_images('./data/digitdata/trainingimages', './data/digitdata/traininglabels', 28, 28)
-    faces_data_images, faces_data_labels = load_images('./data/facedata/facedatatrain', './data/facedata/facedatatrainlabels', 35, 70)
+    faces_data_images, faces_data_labels = load_images('./data/facedata/facedatatrain', './data/facedata/facedatatrainlabels', 70, 70)
 
     # Preprocess data (assuming preprocess returns a dict with 'features' and 'labels')
     digits_data = preprocess_data(digits_data_images, digits_data_labels)

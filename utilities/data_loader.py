@@ -31,4 +31,3 @@ def load_images(file_path, label_path, image_height, image_width):
     return images, np.array(labels)
 
 
-
