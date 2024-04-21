@@ -2,8 +2,8 @@ from utilities.data_loader import load_images
 from utilities.preprocessing import preprocess_data
 from models.perceptron import Perceptron
 from models.neural_network import NeuralNetwork
-
 import matplotlib.pyplot as plt
+import numpy as np
 
 def plot_images(images, labels, num_images=5):
     fig, axes = plt.subplots(1, num_images, figsize=(10, 2))
@@ -13,6 +13,34 @@ def plot_images(images, labels, num_images=5):
         ax.axis('off')
     plt.show()
 
+def accuracy_score(true_labels, predicted_labels):
+    correct_count = sum(1 for true, pred in zip(true_labels, predicted_labels) if true == pred)
+    return correct_count / len(true_labels)
+
+def confusion_matrix(true_labels, predicted_labels, num_classes):
+    cm = [[0] * num_classes for _ in range(num_classes)]
+    for true, pred in zip(true_labels, predicted_labels):
+        cm[true][pred] += 1
+    return cm
+
+def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
+    cm = np.array(cm)  # Ensure cm is a numpy array for compatibility with np functions
+    plt.figure(figsize=(8, 6))
+    plt.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.title(title)
+    plt.colorbar()
+    tick_marks = np.arange(len(cm))
+    plt.xticks(tick_marks, tick_marks)
+    plt.yticks(tick_marks, tick_marks)
+    plt.ylabel('True label')
+    plt.xlabel('Predicted label')
+
+    # Label each cell with the counts
+    for i, j in np.ndindex(cm.shape):
+        plt.text(j, i, str(cm[i][j]), horizontalalignment="center",
+                 color="white" if cm[i, j] > np.max(cm)/2 else "black")
+
+    plt.show()
 
 def main():
     print("Starting")
@@ -20,9 +48,14 @@ def main():
     digits_data_images, digits_data_labels = load_images('./data/digitdata/trainingimages', './data/digitdata/traininglabels', 28, 28)
     faces_data_images, faces_data_labels = load_images('./data/facedata/facedatatrain', './data/facedata/facedatatrainlabels', 70, 70)
 
-    # Preprocess data (assuming preprocess returns a dict with 'features' and 'labels')
+    digits_test_images, digits_test_labels = load_images('./data/digitdata/testimages', './data/digitdata/testlabels', 28, 28)
+    faces_test_images, faces_test_labels = load_images('./data/facedata/facedatatest', './data/facedata/facedatatestlabels', 70, 70)
+
+    # Preprocess data
     digits_data = preprocess_data(digits_data_images, digits_data_labels)
     faces_data = preprocess_data(faces_data_images, faces_data_labels)
+    digits_test_data = preprocess_data(digits_test_images, digits_test_labels)
+    faces_test_data = preprocess_data(faces_test_images, faces_test_labels)
 
     # Initialize models
     perceptron = Perceptron()
@@ -32,29 +65,34 @@ def main():
     perceptron.train(digits_data['features'], digits_data['labels'])
     neural_network.train(faces_data['features'], faces_data['labels'])
 
-    # Example evaluation (add actual evaluation code)
+    # Evaluate models
     print("Evaluation for Perceptron on Digit Data:")
-    # perceptron.evaluate(test_features, test_labels)
+    digits_predictions = perceptron.predict(digits_test_data['features'])
+    digits_accuracy = accuracy_score(digits_test_data['labels'], digits_predictions)
+    print(f"Digits Accuracy: {digits_accuracy:.2f}")
 
     print("Evaluation for Neural Network on Face Data:")
-    print("Digits data images shape:", digits_data_images.shape)
-    print("Digits data labels shape:", digits_data_labels.shape)
-    print("Faces data images shape:", faces_data_images.shape)
-    print("Faces data labels shape:", faces_data_labels.shape)
+    faces_predictions = neural_network.predict(faces_test_data['features'])
+    faces_accuracy = accuracy_score(faces_test_data['labels'], faces_predictions)
+    print(f"Faces Accuracy: {faces_accuracy:.2f}")
 
-    # Check data type
-    print("Digits data images type:", digits_data_images.dtype)
-    print("Faces data images type:", faces_data_images.dtype)
-
-    # neural_network.evaluate(test_features, test_labels)
+    # Visualizations
     print("Visualizing Digits:")
     plot_images(digits_data_images[:5], digits_data_labels[:5])
 
-    # Visualize some faces
     print("Visualizing Faces:")
     plot_images(faces_data_images[:5], faces_data_labels[:5], num_images=5)
 
-    # Add additional code to present results, such as accuracy, confusion matrix, etc.
+    # Confusion matrices
+    print("Confusion Matrix for Digits:")
+    num_classes_digits = np.max(digits_test_labels) + 1
+    cm_digits = confusion_matrix(digits_test_data['labels'], digits_predictions, num_classes_digits)
+    plot_confusion_matrix(cm_digits)
+
+    print("Confusion Matrix for Faces:")
+    num_classes_faces = np.max(faces_test_labels) + 1
+    cm_faces = confusion_matrix(faces_test_data['labels'], faces_predictions, num_classes_faces)
+    plot_confusion_matrix(cm_faces)
 
 if __name__ == "__main__":
     main()
