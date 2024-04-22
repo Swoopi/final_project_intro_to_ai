@@ -1,39 +1,47 @@
 import numpy as np
 
 class Perceptron:
-    def __init__(self, learning_rate=0.1, n_iterations=1000):
+    def __init__(self, learning_rate=0.01, n_iterations=1000):
         self.learning_rate = learning_rate
         self.n_iterations = n_iterations
         self.weights = None
 
     def train(self, features, labels):
-        # Assuming features is a 2D numpy array and labels is a 1D numpy array
-        # Adding a column of ones to the features to account for the bias term in the weights
         features = np.hstack([np.ones((features.shape[0], 1)), features])
-        
-        # Initialize weights if it has not been initialized yet
         if self.weights is None:
             self.weights = np.zeros(features.shape[1])
         
-        # Training the perceptron using the Perceptron Learning Algorithm
         for _ in range(self.n_iterations):
             for x, label in zip(features, labels):
-                # Compute the prediction using the current weights
                 prediction = 1 if np.dot(x, self.weights) >= 0 else 0
-                # Update the weights if the prediction is wrong
                 if label != prediction:
                     self.weights += self.learning_rate * (label - prediction) * x
 
-        print("Training Perceptron...")
+    def predict(self, features):
+        # Add a column of ones to the features for the bias term
+        features = np.hstack([np.ones((features.shape[0], 1)), features])
+        # Compute the predictions for all features at once
+        return np.where(np.dot(features, self.weights) >= 0, 1, 0)
+
+class OneVsAllClassifier:
+    def __init__(self, n_classes, learning_rate=0.1, n_iterations=1000):
+        self.n_classes = n_classes
+        self.perceptrons = [Perceptron(learning_rate, n_iterations) for _ in range(n_classes)]
+
+    def train(self, features, labels):
+        for i in range(self.n_classes):
+            print(f"Training perceptron for class {i}")
+            # Create binary labels for the current class vs all other classes
+            binary_labels = (labels == i).astype(int)
+            self.perceptrons[i].train(features, binary_labels)
 
     def predict(self, features):
-        # Adding a column of ones to the features to account for the bias term in the weights
-        features = np.hstack([np.ones((features.shape[0], 1)), features])
-        # Compute the predictions
-        predictions = np.where(np.dot(features, self.weights) >= 0, 1, 0)
-        return predictions
+        # Predictions need to be aggregated across all classifiers
+        predictions = np.array([perceptron.predict(features) for perceptron in self.perceptrons]).T
+        # Choose the class with the highest confidence (the one with the maximum output)
+        return np.argmax(predictions, axis=1)
 
     def evaluate(self, features, labels):
         predictions = self.predict(features)
-        accuracy = sum(1 for true, pred in zip(labels, predictions) if true == pred) / len(labels)
+        accuracy = np.mean(predictions == labels)
         print(f"Accuracy: {accuracy:.2f}")

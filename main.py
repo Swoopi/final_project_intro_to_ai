@@ -1,6 +1,6 @@
 from utilities.data_loader import load_images
 from utilities.preprocessing import preprocess_data
-from models.perceptron import Perceptron
+from models.perceptron import Perceptron, OneVsAllClassifier
 from models.neural_network import NeuralNetwork
 import matplotlib.pyplot as plt
 import numpy as np
@@ -9,7 +9,7 @@ def plot_images(images, labels, num_images=5):
     fig, axes = plt.subplots(1, num_images, figsize=(10, 2))
     for i, ax in enumerate(axes):
         ax.imshow(images[i], cmap='gray')
-        ax.set_title(f"Label: {labels[i]}")
+        ax.set_title(f"Label: {labels[i]} ")
         ax.axis('off')
     plt.show()
 
@@ -18,29 +18,30 @@ def accuracy_score(true_labels, predicted_labels):
     return correct_count / len(true_labels)
 
 def confusion_matrix(true_labels, predicted_labels, num_classes):
-    cm = [[0] * num_classes for _ in range(num_classes)]
+    cm = np.zeros((num_classes, num_classes), dtype=int)
     for true, pred in zip(true_labels, predicted_labels):
         cm[true][pred] += 1
     return cm
 
+
 def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
-    cm = np.array(cm)  # Ensure cm is a numpy array for compatibility with np functions
     plt.figure(figsize=(8, 6))
     plt.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.title(title)
     plt.colorbar()
-    tick_marks = np.arange(len(cm))
+    tick_marks = np.arange(cm.shape[0])  # Direct use of cm.shape since cm is now a numpy array
     plt.xticks(tick_marks, tick_marks)
     plt.yticks(tick_marks, tick_marks)
     plt.ylabel('True label')
     plt.xlabel('Predicted label')
 
     # Label each cell with the counts
-    for i, j in np.ndindex(cm.shape):
-        plt.text(j, i, str(cm[i][j]), horizontalalignment="center",
+    for i, j in np.ndindex(cm.shape):  # Works correctly as cm is a numpy array
+        plt.text(j, i, str(cm[i, j]), horizontalalignment="center",
                  color="white" if cm[i, j] > np.max(cm)/2 else "black")
 
     plt.show()
+
 
 def main():
     print("Starting")
@@ -58,7 +59,7 @@ def main():
     faces_test_data = preprocess_data(faces_test_images, faces_test_labels)
 
     # Initialize models
-    perceptron = Perceptron()
+    perceptron = OneVsAllClassifier(n_classes=10)  # Assuming 10 classes for digits 0-9
     neural_network = NeuralNetwork()
 
     # Train models
@@ -85,12 +86,12 @@ def main():
 
     # Confusion matrices
     print("Confusion Matrix for Digits:")
-    num_classes_digits = np.max(digits_test_labels) + 1
+    num_classes_digits = 10  # Fixed number for digit classification
     cm_digits = confusion_matrix(digits_test_data['labels'], digits_predictions, num_classes_digits)
     plot_confusion_matrix(cm_digits)
 
     print("Confusion Matrix for Faces:")
-    num_classes_faces = np.max(faces_test_labels) + 1
+    num_classes_faces = 2  # Assuming binary classification for faces
     cm_faces = confusion_matrix(faces_test_data['labels'], faces_predictions, num_classes_faces)
     plot_confusion_matrix(cm_faces)
 
