@@ -26,7 +26,7 @@ def main():
     faces_data = preprocess_data(faces_data_images, faces_data_labels)
     digits_test_data = preprocess_data(digits_test_images, digits_test_labels)
     faces_test_data = preprocess_data(faces_test_images, faces_test_labels)
-
+    '''
     # * Initialize Perceptron models
     perceptron_digits = OneVsAllClassifier(n_classes=10)  # For digit classification
     perceptron_faces = Perceptron(learning_rate=0.01, n_iterations=1000)  # For face detection (binary classification)
@@ -62,13 +62,13 @@ def main():
     cm_faces = confusion_matrix(faces_test_data['labels'], faces_predictions, 2)
     plot_confusion_matrix(cm_faces)
 
+    '''
 
     # * Initialize Neural Network Digits model
     nn = NeuralNetwork(input_size=28*28, hidden_size=128, output_size=10)
-    digits_labels_one_hot = one_hot_encode(digits_data['labels'], 10)
-    nn.train(digits_data['features'], digits_labels_one_hot)
+    nn.train(digits_data['features'], digits_data['labels'], learning_rate=0.01, n_iterations=1000)
     print("Evaluation for Neural Network on Digit Data:")
-    nn.evaluate(digits_test_data['features'], digits_test_data['labels'])
+    print(nn.evaluate(digits_test_data['features'], digits_test_data['labels']))
 
 
 
