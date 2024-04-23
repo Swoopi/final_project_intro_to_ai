@@ -17,11 +17,11 @@ def main():
     print("Starting")
     # Load training, validation, and test data for digits and faces
     digits_data_images, digits_data_labels = load_images('./data/digitdata/trainingimages', './data/digitdata/traininglabels', 28, 28)
-    faces_data_images, faces_data_labels = load_images('./data/facedata/facedatatrain', './data/facedata/facedatatrainlabels', 70, 70)
+    faces_data_images, faces_data_labels = load_images('./data/facedata/facedatatrain', './data/facedata/facedatatrainlabels', 70, 60)
     digits_val_images, digits_val_labels = load_images('./data/digitdata/validationimages', './data/digitdata/validationlabels', 28, 28)
-    faces_val_images, faces_val_labels = load_images('./data/facedata/facedatavalidation', './data/facedata/facedatavalidationlabels', 70, 70)
+    faces_val_images, faces_val_labels = load_images('./data/facedata/facedatavalidation', './data/facedata/facedatavalidationlabels', 70, 60)
     digits_test_images, digits_test_labels = load_images('./data/digitdata/testimages', './data/digitdata/testlabels', 28, 28)
-    faces_test_images, faces_test_labels = load_images('./data/facedata/facedatatest', './data/facedata/facedatatestlabels', 70, 70)
+    faces_test_images, faces_test_labels = load_images('./data/facedata/facedatatest', './data/facedata/facedatatestlabels', 70, 60)
 
     # Flatten and normalize data
     digits_data = preprocess_data(digits_data_images, digits_data_labels)
@@ -36,7 +36,7 @@ def main():
     perceptron_digits = OneVsAllClassifier(n_classes=10)
     perceptron_faces = Perceptron(learning_rate=0.01, n_iterations=1000)
     nn_digits = NeuralNetwork(input_size=28*28, hidden_size=128, output_size=10)
-    nn_faces = NeuralNetwork(input_size=70*70, hidden_size=256, output_size=2)
+    nn_faces = NeuralNetwork(input_size=70*60, hidden_size=128, output_size=2)
 
     # Train models on training data with validation
     perceptron_digits.train(digits_data['features'], digits_data['labels'], digits_val_data['features'], digits_val_data['labels'])

@@ -68,7 +68,7 @@ def visualize_face_predictions(images, labels, predictions, title="Prediction Vi
     plt.figure(figsize=(10, 2))
     for i in range(min(5, len(images))):
         plt.subplot(1, 5, i + 1)
-        plt.imshow(images[i].reshape((70, 70)), cmap='gray')
+        plt.imshow(images[i].reshape((70, 60)), cmap='gray')
         plt.title(f"Pred: {predictions[i]}\nTrue: {labels[i]}")
         plt.axis('off')
     plt.suptitle(title)
