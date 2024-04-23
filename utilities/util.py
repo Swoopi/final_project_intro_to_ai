@@ -33,3 +33,43 @@ def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
         plt.text(j, i, str(cm[i, j]), horizontalalignment="center",
                  color="white" if cm[i, j] > np.max(cm)/2 else "black")
     plt.show()
+
+
+def plot_training_history(losses, accuracies):
+    plt.figure(figsize=(10, 4))
+    plt.subplot(1, 2, 1)
+    plt.plot(losses, label='Loss')
+    plt.title('Training Loss')
+    plt.xlabel('Epoch')
+    plt.ylabel('Loss')
+    plt.grid(True)
+
+    plt.subplot(1, 2, 2)
+    plt.plot(accuracies, label='Accuracy')
+    plt.title('Training Accuracy')
+    plt.xlabel('Epoch')
+    plt.ylabel('Accuracy')
+    plt.grid(True)
+
+    plt.tight_layout()
+    plt.show()
+
+def visualize_predictions(images, labels, predictions, title="Prediction Visualization"):
+    plt.figure(figsize=(10, 2))
+    for i in range(min(5, len(images))):
+        plt.subplot(1, 5, i + 1)
+        plt.imshow(images[i].reshape((28, 28)), cmap='gray')
+        plt.title(f"Pred: {predictions[i]}\nTrue: {labels[i]}")
+        plt.axis('off')
+    plt.suptitle(title)
+    plt.show()
+
+def visualize_face_predictions(images, labels, predictions, title="Prediction Visualization"):
+    plt.figure(figsize=(10, 2))
+    for i in range(min(5, len(images))):
+        plt.subplot(1, 5, i + 1)
+        plt.imshow(images[i].reshape((70, 70)), cmap='gray')
+        plt.title(f"Pred: {predictions[i]}\nTrue: {labels[i]}")
+        plt.axis('off')
+    plt.suptitle(title)
+    plt.show()

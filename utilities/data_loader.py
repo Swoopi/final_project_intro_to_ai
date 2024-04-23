@@ -22,5 +22,6 @@ def load_images(file_path, label_path, image_height, image_width):
     
     return images, np.array(labels)
 
+
 def common_mapping(char):
     return 1 if char in ('#', '+') else 0
