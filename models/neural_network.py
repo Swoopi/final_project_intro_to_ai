@@ -20,9 +20,11 @@ class NeuralNetwork:
     
     def cross_entropy_loss(self, output, y):
         m = y.shape[0]
-        log_likelihood = -np.log(output[np.arange(m), y])
+        epsilon = 1e-10
+        log_likelihood = -np.log(output[np.arange(m), y] + epsilon)
         loss = np.sum(log_likelihood) / m
         return loss
+
     
     
     
@@ -50,11 +52,14 @@ class NeuralNetwork:
         dZ2 = output - self.one_hot(y)
         self.dW2 = np.dot(self.a1.T, dZ2) / m
         self.db2 = np.sum(dZ2, axis=0, keepdims=True) / m
-    
-        dA1 = np.dot(dZ2, self.W2.T)
-        dZ1 = dA1 * self.derivative_relu(self.z1)
+        dZ1 = np.dot(dZ2, self.W2.T) * self.derivative_relu(self.z1)
         self.dW1 = np.dot(X.T, dZ1) / m
         self.db1 = np.sum(dZ1, axis=0, keepdims=True) / m
+    
+        
+    
+
+        
     
     
 
