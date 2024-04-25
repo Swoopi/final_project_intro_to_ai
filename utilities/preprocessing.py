@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def preprocess_data(images, labels):
     # Assuming images is a numpy array of shape (num_samples, height, width)
     # and labels is a numpy array of shape (num_samples,)

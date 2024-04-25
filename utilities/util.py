@@ -54,7 +54,7 @@ def plot_training_history(losses, accuracies):
     plt.tight_layout()
     plt.show()
 
-def visualize_predictions(images, labels, predictions, title="Prediction Visualization"):
+def visualize_predictions(images, labels, predictions, title="Prediction Visualization With Neural Network and Test data"):
     plt.figure(figsize=(10, 2))
     for i in range(min(5, len(images))):
         plt.subplot(1, 5, i + 1)
@@ -73,3 +73,6 @@ def visualize_face_predictions(images, labels, predictions, title="Prediction Vi
         plt.axis('off')
     plt.suptitle(title)
     plt.show()
+
+
+

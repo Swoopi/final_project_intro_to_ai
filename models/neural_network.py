@@ -1,4 +1,5 @@
 import numpy as np
+import time
 
 class NeuralNetwork:
     def __init__(self, input_size, hidden_size, output_size):
@@ -63,7 +64,7 @@ class NeuralNetwork:
 
     def train(self, X, y, X_val, y_val, learning_rate=0.01, n_iterations=1000):
         history = {'loss': [], 'accuracy': [], 'val_loss': [], 'val_accuracy': []}
-
+        time_start = time.time()
         for i in range(n_iterations):
             X, y = self.shuffle_data(X, y)
             output = self.forward(X)
@@ -76,11 +77,11 @@ class NeuralNetwork:
                 val_output = self.forward(X_val)
                 val_loss = self.cross_entropy_loss(val_output, y_val)
                 val_acc = self.accuracy(X_val, y_val)
-                print(f"Iteration {i}: Training Loss: {train_loss:.4f}, Validation Loss: {val_loss:.4f}")
                 history['loss'].append(train_loss)
                 history['accuracy'].append(train_acc)
                 history['val_loss'].append(val_loss)
                 history['val_accuracy'].append(val_acc)
+        print("Neural Network Time: --- %s seconds ---" % (time.time() - time_start))
 
         return history
 
