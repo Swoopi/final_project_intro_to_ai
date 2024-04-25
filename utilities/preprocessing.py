@@ -1,17 +1,36 @@
 import numpy as np
 
-
-def preprocess_data(images, labels):
+def extract_features(images):
     # Assuming images is a numpy array of shape (num_samples, height, width)
-    # and labels is a numpy array of shape (num_samples,)
+    num_samples, height, width = images.shape
+    features = []
 
-    # Flatten the images from (num_samples, height, width) to (num_samples, height*width)
+    for image in images:
+        # Calculate percentage of active pixels in four quadrants
+        center_h, center_v = height // 2, width // 2
+        quadrants = [
+            image[:center_h, :center_v],  # Top-left
+            image[:center_h, center_v:],  # Top-right
+            image[center_h:, :center_v],  # Bottom-left
+            image[center_h:, center_v:],  # Bottom-right
+        ]
+        quadrant_features = [np.mean(quadrant) for quadrant in quadrants]
+        features.append(quadrant_features)
+
+    return np.array(features)
+
+
+def preprocess_data(images, labels, extract_features_flag=True):
     num_samples, height, width = images.shape
     flattened_images = images.reshape(num_samples, height * width)
 
-    # Normalize the pixel values from 0-1
-    # Assuming the maximum pixel value is 1 if using binary images from your load_images
-    normalized_images = flattened_images.astype(np.float32) / 1.0
+    if extract_features_flag:
+        # Calculate the quadrant features
+        quadrant_features = extract_features(images)
+        # Augment the flattened data with the new quadrant features
+        augmented_data = np.concatenate((flattened_images, quadrant_features), axis=1)
+    else:
+        augmented_data = flattened_images  # Use only flattened images for face data
 
     # Return a dictionary containing the features and labels
-    return {'features': normalized_images, 'labels': labels}
+    return {'features': augmented_data, 'labels': labels}

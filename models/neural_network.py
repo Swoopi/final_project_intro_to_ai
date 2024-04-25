@@ -2,10 +2,11 @@ import numpy as np
 import time
 
 class NeuralNetwork:
-    def __init__(self, input_size, hidden_size, output_size):
+    def __init__(self, input_size, hidden_size, output_size, lambda_reg=0.01):
         self.input_size = input_size
         self.hidden_size = hidden_size
         self.output_size = output_size
+        self.lambda_reg = lambda_reg  # Regularization strength
         self.W1 = np.random.randn(input_size, hidden_size) * 0.01
         self.W2 = np.random.randn(hidden_size, output_size) * 0.01
         self.b1 = np.zeros((1, hidden_size))
@@ -21,8 +22,10 @@ class NeuralNetwork:
         m = y.shape[0]
         epsilon = 1e-10
         log_likelihood = -np.log(output[np.arange(m), y] + epsilon)
-        loss = np.sum(log_likelihood) / m
-        return loss
+        data_loss = np.sum(log_likelihood) / m
+        reg_loss = (self.lambda_reg / 2) * (np.sum(np.square(self.W1)) + np.sum(np.square(self.W2)))
+        total_loss = data_loss + reg_loss
+        return total_loss
 
     def softmax(self, z):
         shift_z = z - np.max(z, axis=1, keepdims=True)
@@ -45,10 +48,10 @@ class NeuralNetwork:
     def backward(self, X, y, output):
         m = y.shape[0]
         dZ2 = output - self.one_hot(y)
-        self.dW2 = np.dot(self.a1.T, dZ2) / m
+        self.dW2 = (np.dot(self.a1.T, dZ2) / m) + (self.lambda_reg * self.W2)
         self.db2 = np.sum(dZ2, axis=0, keepdims=True) / m
         dZ1 = np.dot(dZ2, self.W2.T) * self.derivative_relu(self.z1)
-        self.dW1 = np.dot(X.T, dZ1) / m
+        self.dW1 = (np.dot(X.T, dZ1) / m) + (self.lambda_reg * self.W1)
         self.db1 = np.sum(dZ1, axis=0, keepdims=True) / m
 
     def shuffle_data(self, X, y):
@@ -82,7 +85,6 @@ class NeuralNetwork:
                 history['val_loss'].append(val_loss)
                 history['val_accuracy'].append(val_acc)
         print("Neural Network Time: --- %s seconds ---" % (time.time() - time_start))
-
         return history
 
     def predict(self, X):

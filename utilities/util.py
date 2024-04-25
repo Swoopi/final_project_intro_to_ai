@@ -1,13 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 #! Util.py, a utility file containing helper functions for data loading, preprocessing, and evaluation
-def plot_images(images, labels, num_images=5):
-    fig, axes = plt.subplots(1, num_images, figsize=(10, 2))
-    for i, ax in enumerate(axes):
-        ax.imshow(images[i], cmap='gray')
-        ax.set_title(f"Label: {labels[i]} ")
-        ax.axis('off')
-    plt.show()
+
 
 def accuracy_score(true_labels, predicted_labels):
     correct_count = sum(1 for true, pred in zip(true_labels, predicted_labels) if true == pred)
@@ -54,25 +48,7 @@ def plot_training_history(losses, accuracies):
     plt.tight_layout()
     plt.show()
 
-def visualize_predictions(images, labels, predictions, title="Prediction Visualization With Neural Network and Test data"):
-    plt.figure(figsize=(10, 2))
-    for i in range(min(5, len(images))):
-        plt.subplot(1, 5, i + 1)
-        plt.imshow(images[i].reshape((28, 28)), cmap='gray')
-        plt.title(f"Pred: {predictions[i]}\nTrue: {labels[i]}")
-        plt.axis('off')
-    plt.suptitle(title)
-    plt.show()
 
-def visualize_face_predictions(images, labels, predictions, title="Prediction Visualization"):
-    plt.figure(figsize=(10, 2))
-    for i in range(min(5, len(images))):
-        plt.subplot(1, 5, i + 1)
-        plt.imshow(images[i].reshape((70, 60)), cmap='gray')
-        plt.title(f"Pred: {predictions[i]}\nTrue: {labels[i]}")
-        plt.axis('off')
-    plt.suptitle(title)
-    plt.show()
 
 
 

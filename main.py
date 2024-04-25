@@ -3,15 +3,9 @@ from utilities.data_loader import load_images
 from utilities.preprocessing import preprocess_data
 from models.perceptron import Perceptron
 from models.neural_network import NeuralNetwork
-from utilities.util import plot_images, accuracy_score, confusion_matrix, plot_confusion_matrix, plot_training_history, visualize_predictions, visualize_face_predictions, plot_training_history
+from utilities.util import  accuracy_score, confusion_matrix, plot_confusion_matrix, plot_training_history, plot_training_history
 import numpy as np
 
-
-def one_hot_encode(labels, num_classes):
-    """ Convert labels to one-hot encoded format. """
-    one_hot = np.zeros((labels.size, num_classes))
-    one_hot[np.arange(labels.size), labels] = 1
-    return one_hot
 
 def main():
     print("Starting")
@@ -29,19 +23,19 @@ def main():
     # Flatten and normalize data
     print("Data Loaded, Processing...")
     digits_data = preprocess_data(digits_data_images, digits_data_labels)
-    faces_data = preprocess_data(faces_data_images, faces_data_labels)
+    faces_data = preprocess_data(faces_data_images, faces_data_labels, extract_features_flag=False)
     digits_test_data = preprocess_data(digits_test_images, digits_test_labels)
-    faces_test_data = preprocess_data(faces_test_images, faces_test_labels)
+    faces_test_data = preprocess_data(faces_test_images, faces_test_labels, extract_features_flag=False)
     digits_val_data = preprocess_data(digits_val_images, digits_val_labels)
-    faces_val_data = preprocess_data(faces_val_images, faces_val_labels)
+    faces_val_data = preprocess_data(faces_val_images, faces_val_labels, extract_features_flag=False)
     
     
     # Initialize models
     print("Data Processed, Initializing Models...")
     perceptron_digits = Perceptron(learning_rate=0.01, n_iterations=1000, n_classes=10)
     perceptron_faces = Perceptron(learning_rate=0.01, n_iterations=1000)
-    nn_digits = NeuralNetwork(input_size=28*28, hidden_size=128, output_size=10)
-    nn_faces = NeuralNetwork(input_size=70*60, hidden_size=128, output_size=2)
+    nn_digits = NeuralNetwork(input_size=28*28 + 4, hidden_size=128, output_size=10, lambda_reg=0.001)
+    nn_faces = NeuralNetwork(input_size=70*60, hidden_size=128, output_size=2, lambda_reg=0.01)
 
     # Train models on training data with validation
     print("Models Initialized, Training Perceptron...")
@@ -73,11 +67,7 @@ def main():
     print("Evaluation for Neural Network on Face Data:")
     print(nn_faces.evaluate(faces_test_data['features'], faces_test_data['labels']))
 
-    # Visualizations
-    print("Visualizing Digits:")
-    plot_images(digits_data_images[:5], digits_data_labels[:5])
-    print("Visualizing Faces:")
-    plot_images(faces_data_images[:5], faces_data_labels[:5])
+    
 
     print("Confusion Matrix for Digits:")
     cm_digits = confusion_matrix(digits_test_data['labels'], digits_predictions, 10)
@@ -92,10 +82,9 @@ def main():
     plot_training_history(history_faces['loss'], history_faces['accuracy'])
 
     digits_predictions = nn_digits.predict(digits_test_data['features'])
-    visualize_predictions(digits_test_data['features'], digits_test_data['labels'], digits_predictions, "Digit Prediction Visualization")
 
     faces_predictions = nn_faces.predict(faces_test_data['features'])
-    visualize_face_predictions(faces_test_data['features'], faces_test_data['labels'], faces_predictions)
+
 
 if __name__ == "__main__":
     main()
