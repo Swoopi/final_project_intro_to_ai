@@ -54,15 +54,19 @@ def plot_training_history(losses, accuracies):
     plt.tight_layout()
     plt.show()
 
-def visualize_predictions(images, labels, predictions, title="Prediction Visualization With Neural Network and Test data"):
-    plt.figure(figsize=(10, 2))
-    for i in range(min(5, len(images))):
-        plt.subplot(1, 5, i + 1)
-        plt.imshow(images[i].reshape((28, 28)), cmap='gray')
-        plt.title(f"Pred: {predictions[i]}\nTrue: {labels[i]}")
+def visualize_predictions(images, labels, predictions, title):
+    import matplotlib.pyplot as plt
+    plt.figure(figsize=(10, 5))
+    for i in range(10):  # Assuming you want to visualize the first 10 predictions
+        plt.subplot(2, 5, i + 1)
+        # Only reshape the first 784 elements back to 28x28
+        image_pixels = images[i][:784]  # Assuming the first 784 elements are image pixels
+        plt.imshow(image_pixels.reshape((28, 28)), cmap='gray')
+        plt.title(f'Label: {labels[i]}\nPredicted: {predictions[i]}')
         plt.axis('off')
     plt.suptitle(title)
     plt.show()
+
 
 def visualize_face_predictions(images, labels, predictions, title="Prediction Visualization"):
     plt.figure(figsize=(10, 2))

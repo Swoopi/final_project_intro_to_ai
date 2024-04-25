@@ -40,8 +40,8 @@ def main():
     print("Data Processed, Initializing Models...")
     perceptron_digits = Perceptron(learning_rate=0.01, n_iterations=1000, n_classes=10)
     perceptron_faces = Perceptron(learning_rate=0.01, n_iterations=1000)
-    nn_digits = NeuralNetwork(input_size=28*28, hidden_size=128, output_size=10)
-    nn_faces = NeuralNetwork(input_size=70*60, hidden_size=128, output_size=2)
+    nn_digits = NeuralNetwork(input_size=28*28 + 4, hidden_size=128, output_size=10)
+    nn_faces = NeuralNetwork(input_size=70*60+4, hidden_size=128, output_size=2)
 
     # Train models on training data with validation
     print("Models Initialized, Training Perceptron...")
@@ -91,11 +91,6 @@ def main():
     plot_training_history(history_digits['loss'], history_digits['accuracy'])
     plot_training_history(history_faces['loss'], history_faces['accuracy'])
 
-    digits_predictions = nn_digits.predict(digits_test_data['features'])
-    visualize_predictions(digits_test_data['features'], digits_test_data['labels'], digits_predictions, "Digit Prediction Visualization")
-
-    faces_predictions = nn_faces.predict(faces_test_data['features'])
-    visualize_face_predictions(faces_test_data['features'], faces_test_data['labels'], faces_predictions)
 
 if __name__ == "__main__":
     main()
