@@ -1,0 +1,80 @@
+Testing with 10% of data
+Perceptron Digit Time: 4.073 seconds
+Perceptron Face Time: 2.451 seconds
+Neural Network Time: 4.131 seconds; 7.106 seconds
+Digits Accuracy: 74.0%
+Faces Accuracy: 72.7%
+Neural Network on Digit Data Accuracy: 70.0% (0.702)
+Neural Network on Face Data Accuracy: 61.0% (0.613)
+Testing with 20% of data
+Perceptron Digit Time: 6.276 seconds
+Perceptron Face Time: 2.927 seconds
+Neural Network Time: 10.478 seconds; 9.446 seconds
+Digits Accuracy: 75.0%
+Faces Accuracy: 78.7%
+Neural Network on Digit Data Accuracy: 79.0% (0.793)
+Neural Network on Face Data Accuracy: 81.0% (0.813)
+Testing with 30% of data
+Perceptron Digit Time: 9.710 seconds
+Perceptron Face Time: 2.991 seconds
+Neural Network Time: 10.923 seconds; 11.388 seconds
+Digits Accuracy: 76.8%
+Faces Accuracy: 82.0%
+Neural Network on Digit Data Accuracy: 82.0% (0.82)
+Neural Network on Face Data Accuracy: 85.0% (0.853)
+Testing with 40% of data
+Perceptron Digit Time: 10.831 seconds
+Perceptron Face Time: 3.230 seconds
+Neural Network Time: 15.964 seconds; 15.115 seconds
+Digits Accuracy: 79.1%
+Faces Accuracy: 83.3%
+Neural Network on Digit Data Accuracy: 83.0% (0.83)
+Neural Network on Face Data Accuracy: 89.0% (0.887)
+Testing with 50% of data
+Perceptron Digit Time: 13.100 seconds
+Perceptron Face Time: 3.543 seconds
+Neural Network Time: 20.479 seconds; 14.900 seconds
+Digits Accuracy: 80.6%
+Faces Accuracy: 85.3%
+Neural Network on Digit Data Accuracy: 84.0% (0.841)
+Neural Network on Face Data Accuracy: 89.0% (0.887)
+Testing with 60% of data
+Perceptron Digit Time: 15.210 seconds
+Perceptron Face Time: 3.855 seconds
+Neural Network Time: 24.770 seconds; 17.785 seconds
+Digits Accuracy: 82.2%
+Faces Accuracy: 86.7%
+Neural Network on Digit Data Accuracy: 85.0% (0.851)
+Neural Network on Face Data Accuracy: 90.0% (0.9)
+Testing with 70% of data
+Perceptron Digit Time: 17.696 seconds
+Perceptron Face Time: 3.671 seconds
+Neural Network Time: 28.031 seconds; 20.669 seconds
+Digits Accuracy: 82.6%
+Faces Accuracy: 84.7%
+Neural Network on Digit Data Accuracy: 86.0% (0.858)
+Neural Network on Face Data Accuracy: 88.0% (0.88)
+Testing with 80% of data
+Perceptron Digit Time: 19.342 seconds
+Perceptron Face Time: 3.698 seconds
+Neural Network Time: 32.536 seconds; 21.270 seconds
+Digits Accuracy: 81.9%
+Faces Accuracy: 86.7%
+Neural Network on Digit Data Accuracy: 86.0% (0.86)
+Neural Network on Face Data Accuracy: 92.0% (0.92)
+Testing with 90% of data
+Perceptron Digit Time: 21.708 seconds
+Perceptron Face Time: 4.095 seconds
+Neural Network Time: 37.010 seconds; 24.359 seconds
+Digits Accuracy: 82.1%
+Faces Accuracy: 85.3%
+Neural Network on Digit Data Accuracy: 86.0% (0.862)
+Neural Network on Face Data Accuracy: 93.0% (0.927)
+Testing with 100% of data
+Perceptron Digit Time: 24.291 seconds
+Perceptron Face Time: 4.365 seconds
+Neural Network Time: 42.408 seconds; 26.019 seconds
+Digits Accuracy: 82.3%
+Faces Accuracy: 88.0%
+Neural Network on Digit Data Accuracy: 87.0% (0.866)
+Neural Network on Face Data Accuracy: 91.0% (0.913)
